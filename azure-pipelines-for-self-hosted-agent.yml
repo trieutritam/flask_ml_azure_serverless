@@ -10,10 +10,10 @@ pool: myAgentPool
 
 variables:
   # TODO: Replace the service connection name as used in the DevOps project settings
-  azureServiceConnectionId: 'mySC'
+  azureServiceConnectionId: 'Flask ML App Exercise Service'
   
   # TODO: Specify the value of the existing Web App name
-  webAppName: 'mywebapp207578'
+  webAppName: 'flask-ml-service-258792'
 
   # Environment name
   environmentName: 'flask-ml-service'
@@ -29,27 +29,27 @@ stages:
     pool: myAgentPool
     steps:    
     - script: |
-        python3.7 -m pip install --upgrade pip
-        python3.7 -m pip install setup
-        python3.7 -m pip install -r requirements.txt
+        python3 -m pip install --upgrade pip
+        python3 -m pip install setup
+        python3 -m pip install -r requirements.txt
       workingDirectory: $(projectRoot)
-      displayName: 'myStep 1'
+      displayName: 'Install Dependencies'
 
     - script: |
         export PATH=$HOME/.local/bin:$PATH
         make install
       workingDirectory: $(projectRoot)
-      displayName: 'myStep 2'
+      displayName: 'Make Install'
 
     - script: |
         export PATH=$HOME/.local/bin:$PATH
         make install
         make lint
       workingDirectory: $(projectRoot)
-      displayName:  'myStep 3 - Run lint tests'
+      displayName:  'Run lint tests'
 
     - task: ArchiveFiles@2
-      displayName: 'myStep 4 - Archive files'
+      displayName: 'Archive files'
       inputs:
         rootFolderOrFile: '$(projectRoot)'
         includeRootFolder: false
@@ -58,5 +58,5 @@ stages:
         replaceExistingArchive: true
 
     - upload: $(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip
-      displayName: 'myStep 5 - Upload package'
+      displayName: 'Upload package'
       artifact: drop
